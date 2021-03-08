@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:polls_for_devs/data/http/http_client.dart';
+import 'package:polls_for_devs/data/http/http_error.dart';
+import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 
 class RemoteAuthenticationService {
@@ -9,11 +11,17 @@ class RemoteAuthenticationService {
   RemoteAuthenticationService({@required this.httpClient, @required this.url});
 
   Future<void> auth(AuthenticationUseCaseParams params) async {
-    await httpClient.request(
-      url: url,
-      method: 'post',
-      body: RemoteAuthenticationServiceParams.fromDomain(params).toJson(),
-    );
+    final body = RemoteAuthenticationServiceParams.fromDomain(params).toJson();
+
+    try {
+      await httpClient.request(
+        url: url,
+        method: 'post',
+        body: body,
+      );
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 

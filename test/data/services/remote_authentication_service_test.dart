@@ -1,7 +1,9 @@
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:polls_for_devs/data/http/http_client.dart';
+import 'package:polls_for_devs/data/http/http_error.dart';
 import 'package:polls_for_devs/data/services/remote_authentication_service.dart';
+import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 import 'package:test/test.dart';
 
@@ -34,5 +36,24 @@ void main() {
         'password': params.secret,
       },
     ));
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns 400', () async {
+    when(
+      httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ),
+    ).thenThrow(HttpError.badRequest);
+
+    final params = AuthenticationUseCaseParams(
+      email: faker.internet.email(),
+      secret: faker.internet.password(),
+    );
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
