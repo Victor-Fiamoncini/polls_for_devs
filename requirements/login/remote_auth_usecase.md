@@ -25,4 +25,4 @@
 
 ## Exceção - Credenciais inválidas
 
-1. Sistema retorna uam mensagem de erro informando que as credenciais estão incorretas.
+1. ✔️ Sistema retorna uam mensagem de erro informando que as credenciais estão incorretas.
