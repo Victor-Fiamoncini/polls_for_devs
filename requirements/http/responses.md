@@ -2,10 +2,11 @@
 
 ## Sucesso
 
-1. Request com verbo válido (POST)
+1. ✔️ Request com verbo válido (POST)
 2. Passar nos headers o "content-type JSON"
-3. Ok - 200 e resposta com dados
-4. No content - 204 e resposta sem dados
+3. Chamar request com Body correto
+4. Ok - 200 e resposta com dados
+5. No content - 204 e resposta sem dados
 
 ## Erros
 
