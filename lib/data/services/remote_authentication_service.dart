@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:polls_for_devs/data/http/http_client.dart';
 import 'package:polls_for_devs/data/http/http_error.dart';
+import 'package:polls_for_devs/domain/entities/account_entity.dart';
 import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 
@@ -10,15 +11,17 @@ class RemoteAuthenticationService {
 
   RemoteAuthenticationService({@required this.httpClient, @required this.url});
 
-  Future<void> auth(AuthenticationUseCaseParams params) async {
+  Future<AccountEntity> auth(AuthenticationUseCaseParams params) async {
     final body = RemoteAuthenticationServiceParams.fromDomain(params).toJson();
 
     try {
-      await httpClient.request(
+      final httpResponse = await httpClient.request(
         url: url,
         method: 'post',
         body: body,
       );
+
+      return AccountEntity.fromJson(httpResponse);
     } on HttpError catch (err) {
       throw err == HttpError.unauthorized
           ? DomainError.invalidCredentials
