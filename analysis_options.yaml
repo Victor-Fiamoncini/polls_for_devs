@@ -8,6 +8,6 @@ linter:
     prefer_single_quotes: true
     public_member_api_docs: false
     always_specify_types: false
-    lines_longer_than_80_chars: true
+    lines_longer_than_80_chars: false
     prefer_const_literals_to_create_immutables: false
     avoid_print: false
