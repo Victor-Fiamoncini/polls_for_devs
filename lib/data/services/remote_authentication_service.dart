@@ -7,7 +7,7 @@ import 'package:polls_for_devs/domain/entities/account_entity.dart';
 import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 
-class RemoteAuthenticationService {
+class RemoteAuthenticationService implements AuthenticationUseCase {
   final HttpClient httpClient;
   final String url;
 
