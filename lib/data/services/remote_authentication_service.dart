@@ -13,6 +13,7 @@ class RemoteAuthenticationService implements AuthenticationUseCase {
 
   RemoteAuthenticationService({@required this.httpClient, @required this.url});
 
+  @override
   Future<AccountEntity> auth(AuthenticationUseCaseParams params) async {
     final body = RemoteAuthenticationMapper.fromDomain(params).toJson();
 
