@@ -26,4 +26,4 @@
 
 ## Exceção - Verbo HTTP inválido
 
-1. Internal Server Error - 500
+1. ✔️ Internal Server Error - 500

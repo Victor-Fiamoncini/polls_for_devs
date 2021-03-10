@@ -18,6 +18,20 @@ void main() {
     url = faker.internet.httpUrl();
   });
 
+  group('Shared', () {
+    test(
+      'Should throw ServerError if invalid HTTP method is provided',
+      () async {
+        final future = sut.request(
+          url: url,
+          method: 'invalid_method',
+        );
+
+        expect(future, throwsA(HttpError.serverError));
+      },
+    );
+  });
+
   group('POST', () {
     PostExpectation mockRequest() {
       return when(
