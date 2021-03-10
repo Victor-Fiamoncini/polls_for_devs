@@ -42,7 +42,19 @@ class HttpAdapter implements HttpClient {
       },
       400: () {
         throw HttpError.badRequest;
-      }
+      },
+      401: () {
+        throw HttpError.unauthorized;
+      },
+      403: () {
+        throw HttpError.forbidden;
+      },
+      404: () {
+        throw HttpError.notFound;
+      },
+      500: () {
+        throw HttpError.serverError;
+      },
     };
 
     return statusCodeHandler[response.statusCode]();

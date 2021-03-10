@@ -11,14 +11,14 @@
 ## Erros
 
 1. ✔️ Bad request - 400
-1. Unauthorized - 401
-1. Forbidden - 403
-1. Not Found - 404
-1. Internal Server Error - 500
+2. ✔️ Unauthorized - 401
+3. ✔️ Forbidden - 403
+4. ✔️ Not Found - 404
+5. ✔️ Internal Server Error - 500
 
 ## Exceção - Status code diferente dos citados acima
 
-1. Internal Server Error - 500
+1. ✔️ Internal Server Error - 500
 
 ## Exceção - HTTP request deu alguma exceção
 
