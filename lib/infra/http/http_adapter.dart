@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:polls_for_devs/data/http/http_client.dart';
+import 'package:polls_for_devs/data/http/http_error.dart';
 
 class HttpAdapter implements HttpClient {
   final Client client;
@@ -32,10 +33,18 @@ class HttpAdapter implements HttpClient {
   }
 
   Map _handleResponse(Response response) {
-    if (response.statusCode == 200) {
-      return response.body.isEmpty ? null : jsonDecode(response.body) as Map;
-    }
+    final statusCodeHandler = {
+      200: () {
+        return response.body.isEmpty ? null : jsonDecode(response.body) as Map;
+      },
+      204: () {
+        return null;
+      },
+      400: () {
+        throw HttpError.badRequest;
+      }
+    };
 
-    return null;
+    return statusCodeHandler[response.statusCode]();
   }
 }
