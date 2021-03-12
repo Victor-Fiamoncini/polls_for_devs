@@ -33,6 +33,24 @@ class App extends StatelessWidget {
           ),
           alignLabelWithHint: true,
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: primaryColor,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            primary: primaryColor,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
         buttonTheme: ButtonThemeData(
           colorScheme: const ColorScheme.light(primary: primaryColor),
           buttonColor: primaryColor,
