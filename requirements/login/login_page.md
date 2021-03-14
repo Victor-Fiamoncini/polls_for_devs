@@ -1,7 +1,7 @@
 # Login Page
 
-1. Os campos devem começar sem exibir mensagem de erro
-2. O botão de fazer login deve começar desabilitado
+1. ✔️ Os campos devem começar sem exibir mensagem de erro
+2. ✔️ O botão de fazer login deve começar desabilitado
 3. Após digitar algo em algum campo, a mensagem de erro só deve sumir se o campo for válido
 4. Validar email quando o usuário digitar no campo
 5. Mostrar mensagem de erro se o email for inválido
