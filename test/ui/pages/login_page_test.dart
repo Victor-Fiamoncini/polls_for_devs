@@ -95,4 +95,18 @@ void main() {
 
     expect(emailTextChildren, findsOneWidget);
   });
+
+  testWidgets('Should present no error if email is valid', (tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add('');
+    await tester.pump();
+
+    final emailTextChildren = find.descendant(
+      of: find.bySemanticsLabel('Email'),
+      matching: find.byType(Text),
+    );
+
+    expect(emailTextChildren, findsOneWidget);
+  });
 }
