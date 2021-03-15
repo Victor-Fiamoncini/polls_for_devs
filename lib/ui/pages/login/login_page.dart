@@ -4,9 +4,9 @@ import 'package:polls_for_devs/ui/components/login_header.dart';
 import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
 
 class LoginPage extends StatelessWidget {
-  final LoginPresenter loginPresenter;
+  final LoginPresenter presenter;
 
-  const LoginPage(this.loginPresenter);
+  const LoginPage(this.presenter);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                   children: [
                     StreamBuilder<String>(
-                      stream: loginPresenter.emailErrorStream,
+                      stream: presenter.emailErrorStream,
                       builder: (context, snapshot) {
                         return TextFormField(
                           decoration: InputDecoration(
@@ -37,22 +37,28 @@ class LoginPage extends StatelessWidget {
                                 : snapshot.data,
                           ),
                           keyboardType: TextInputType.emailAddress,
-                          onChanged: loginPresenter.validateEmail,
+                          onChanged: presenter.validateEmail,
                         );
                       },
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8, bottom: 32),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Senha',
-                          icon: Icon(
-                            Icons.lock,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        obscureText: true,
-                        onChanged: loginPresenter.validatePassword,
+                      child: StreamBuilder<String>(
+                        stream: presenter.passwordErrorStream,
+                        builder: (context, snapshot) {
+                          return TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Senha',
+                              icon: Icon(
+                                Icons.lock,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              errorText: snapshot.data,
+                            ),
+                            obscureText: true,
+                            onChanged: presenter.validatePassword,
+                          );
+                        },
                       ),
                     ),
                     Padding(

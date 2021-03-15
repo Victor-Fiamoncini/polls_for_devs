@@ -10,23 +10,26 @@ import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 void main() {
-  LoginPresenter loginPresenter;
+  LoginPresenter presenter;
   StreamController<String> emailErrorController;
+  StreamController<String> passwordErrorController;
 
   Future<void> loadPage(WidgetTester tester) async {
-    loginPresenter = LoginPresenterSpy();
+    presenter = LoginPresenterSpy();
     emailErrorController = StreamController<String>();
+    passwordErrorController = StreamController<String>();
 
-    when(loginPresenter.emailErrorStream).thenAnswer(
+    when(presenter.emailErrorStream).thenAnswer(
       (_) => emailErrorController.stream,
     );
 
-    final loginPage = MaterialApp(home: LoginPage(loginPresenter));
+    final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
 
   tearDown(() {
     emailErrorController.close();
+    passwordErrorController.close();
   });
 
   testWidgets('Should load with correct initial state', (tester) async {
@@ -66,11 +69,11 @@ void main() {
 
     final email = faker.internet.email();
     await tester.enterText(find.bySemanticsLabel('Email'), email);
-    verify(loginPresenter.validateEmail(email));
+    verify(presenter.validateEmail(email));
 
     final password = faker.internet.password();
     await tester.enterText(find.bySemanticsLabel('Senha'), password);
-    verify(loginPresenter.validatePassword(password));
+    verify(presenter.validatePassword(password));
   });
 
   testWidgets('Should present error if email is invalid', (tester) async {
@@ -108,5 +111,14 @@ void main() {
     );
 
     expect(emailTextChildren, findsOneWidget);
+  });
+
+  testWidgets('Should present error if password is invalid', (tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add('any error');
+    await tester.pump();
+
+    expect(find.text('any error'), findsOneWidget);
   });
 }
