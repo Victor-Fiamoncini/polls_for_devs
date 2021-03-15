@@ -184,4 +184,17 @@ void main() {
     expect(button.enabled, false);
     expect(button.onPressed, null);
   });
+
+  testWidgets('Should call authentication on form submit', (tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pump();
+
+    final button = find.byType(ElevatedButton);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(presenter.auth()).called(1);
+  });
 }
