@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
+import 'package:provider/provider.dart';
 
 class EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final presenter = Provider.of<LoginPresenter>(context);
+
     return StreamBuilder<String>(
       stream: presenter.emailErrorStream,
       builder: (context, snapshot) {
