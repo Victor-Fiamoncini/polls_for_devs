@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
 import 'package:polls_for_devs/ui/pages/login/widgets/email_input.dart';
+import 'package:polls_for_devs/ui/pages/login/widgets/login_button.dart';
+import 'package:polls_for_devs/ui/pages/login/widgets/password_input.dart';
 import 'package:polls_for_devs/ui/widgets/error_message.dart';
 import 'package:polls_for_devs/ui/widgets/headline1.dart';
 import 'package:polls_for_devs/ui/widgets/loading.dart';
@@ -59,42 +61,11 @@ class _LoginPageState extends State<LoginPage> {
                           EmailInput(),
                           Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 32),
-                            child: StreamBuilder<String>(
-                              stream: widget.presenter.passwordErrorStream,
-                              builder: (context, snapshot) {
-                                return TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Senha',
-                                    icon: Icon(
-                                      Icons.lock,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    errorText: snapshot.data?.isEmpty == true
-                                        ? null
-                                        : snapshot.data,
-                                  ),
-                                  obscureText: true,
-                                  onChanged: widget.presenter.validatePassword,
-                                );
-                              },
-                            ),
+                            child: PasswordInput(),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8),
-                            child: StreamBuilder<bool>(
-                              stream: widget.presenter.isFormValidStream,
-                              builder: (context, snapshot) {
-                                return ElevatedButton(
-                                  onPressed: snapshot.data == true
-                                      ? widget.presenter.auth
-                                      : null,
-                                  style: Theme.of(context)
-                                      .elevatedButtonTheme
-                                      .style,
-                                  child: const Text('ENTRAR'),
-                                );
-                              },
-                            ),
+                            child: LoginButton(),
                           ),
                           TextButton.icon(
                             onPressed: () {},
