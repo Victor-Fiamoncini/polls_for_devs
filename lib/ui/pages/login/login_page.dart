@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:polls_for_devs/ui/components/error_message.dart';
 import 'package:polls_for_devs/ui/components/headline1.dart';
 import 'package:polls_for_devs/ui/components/login_header.dart';
+import 'package:polls_for_devs/ui/components/loading.dart';
 import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -27,42 +29,15 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) {
           widget.presenter.isLoadingStream.listen((isLoading) {
             if (isLoading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) {
-                  return SimpleDialog(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CircularProgressIndicator(),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'Aguarde...',
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      )
-                    ],
-                  );
-                },
-              );
+              showLoading(context);
             } else {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              }
+              hideLoading(context);
             }
           });
 
           widget.presenter.mainErrorStream.listen((error) {
             if (error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.red[900],
-                  content: Text(error, textAlign: TextAlign.center),
-                ),
-              );
+              showErrorMessage(context, error);
             }
           });
 
@@ -77,25 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Form(
                     child: Column(
                       children: [
-                        StreamBuilder<String>(
-                          stream: widget.presenter.emailErrorStream,
-                          builder: (context, snapshot) {
-                            return TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                icon: Icon(
-                                  Icons.email,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                errorText: snapshot.data?.isEmpty == true
-                                    ? null
-                                    : snapshot.data,
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              onChanged: widget.presenter.validateEmail,
-                            );
-                          },
-                        ),
+                        EmailInput(),
                         Padding(
                           padding: const EdgeInsets.only(top: 8, bottom: 32),
                           child: StreamBuilder<String>(
