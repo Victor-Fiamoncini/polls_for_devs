@@ -13,6 +13,6 @@
 11. ✔️ Desabilitar o botão de login se algum campo for inválido
 12. ✔️ Exibir loading no início da ação de login
 13. ✔️ Chamar o método de autenticar
-14. Exibir mensagem de erro caso o login falhe
+14. ✔️ Exibir mensagem de erro caso o login falhe
 15. ✔️ Esconder loading no fim da ação de login
-16. Fechar streams quando a página for encerrada
+16. ✔️ Fechar streams quando a página for encerrada
