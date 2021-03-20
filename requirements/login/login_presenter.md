@@ -1,6 +1,6 @@
 # Login Presenter
 
-1. Chamar Validation ao alterar o email
+1. ✔️ Chamar Validation ao alterar o email
 2. Notificar o emailErrorStream com o mesmo erro do Validation, caso retorne erro
 3. Notificar o emailErrorStream com null, caso o Validation não retorne erro
 4. Não notificar o emailErrorStream se o valor for igual ao último
