@@ -5,6 +5,7 @@ import 'package:polls_for_devs/presentation/protocols/validation.dart';
 
 class LoginState {
   String emailError;
+  bool get isFormValid => false;
 }
 
 class StreamLoginPresenter {
@@ -19,8 +20,13 @@ class StreamLoginPresenter {
     return _controller.stream.map((state) => state.emailError).distinct();
   }
 
+  Stream<bool> get isFormValidStream {
+    return _controller.stream.map((state) => state.isFormValid).distinct();
+  }
+
   void validateEmail(String email) {
     _state.emailError = validation.validate(field: 'email', value: email);
+
     _controller.add(_state);
   }
 }
