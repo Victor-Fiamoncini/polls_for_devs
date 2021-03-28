@@ -37,11 +37,14 @@ void main() {
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('Should emit email erro if validation fails', () {
+  test('Should emit one email error if validation fails', () {
     mockValidation(value: 'error');
 
-    expectLater(sut.emailErrorStream, emits('error'));
+    sut.emailErrorStream.listen(
+      expectAsync1((error) => expect(error, 'error')),
+    );
 
+    sut.validateEmail(email);
     sut.validateEmail(email);
   });
 }
