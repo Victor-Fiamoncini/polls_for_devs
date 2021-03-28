@@ -1,13 +1,17 @@
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
+import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 import 'package:polls_for_devs/presentation/presenters/stream_login_presenter.dart';
 import 'package:polls_for_devs/presentation/protocols/validation.dart';
 import 'package:test/test.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
+class AuthenticationSpy extends Mock implements AuthenticationUseCase {}
+
 void main() {
   ValidationSpy validation;
+  AuthenticationSpy authentication;
   StreamLoginPresenter sut;
   String email;
   String password;
@@ -27,7 +31,11 @@ void main() {
 
   setUp(() {
     validation = ValidationSpy();
-    sut = StreamLoginPresenter(validation: validation);
+    authentication = AuthenticationSpy();
+    sut = StreamLoginPresenter(
+      validation: validation,
+      authentication: authentication,
+    );
     email = faker.internet.email();
     password = faker.internet.password();
     mockValidation();
@@ -132,5 +140,21 @@ void main() {
     sut.validateEmail(email);
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
+  });
+
+  test('Should call Authentication with correct values', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(
+      authentication.auth(
+        AuthenticationUseCaseParams(
+          email: email,
+          secret: password,
+        ),
+      ),
+    ).called(1);
   });
 }

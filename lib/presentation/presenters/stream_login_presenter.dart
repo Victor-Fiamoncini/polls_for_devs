@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 import 'package:polls_for_devs/presentation/protocols/validation.dart';
 
 class LoginState {
@@ -18,11 +19,15 @@ class LoginState {
 
 class StreamLoginPresenter {
   final Validation validation;
+  final AuthenticationUseCase authentication;
 
   final _controller = StreamController<LoginState>.broadcast();
   final _state = LoginState();
 
-  StreamLoginPresenter({@required this.validation});
+  StreamLoginPresenter({
+    @required this.validation,
+    @required this.authentication,
+  });
 
   Stream<String> get emailErrorStream {
     return _controller.stream.map((state) => state.emailError).distinct();
@@ -53,5 +58,11 @@ class StreamLoginPresenter {
     );
 
     _update();
+  }
+
+  Future<void> auth() async {
+    await authentication.auth(
+      AuthenticationUseCaseParams(email: _state.email, secret: _state.password),
+    );
   }
 }
