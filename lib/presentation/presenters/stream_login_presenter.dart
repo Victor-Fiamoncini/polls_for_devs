@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 import 'package:polls_for_devs/presentation/protocols/validation.dart';
+import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
 
 class LoginState {
   String email;
@@ -20,7 +21,7 @@ class LoginState {
       password != null;
 }
 
-class StreamLoginPresenter {
+class StreamLoginPresenter implements LoginPresenter {
   final Validation validation;
   final AuthenticationUseCase authentication;
 
@@ -32,28 +33,34 @@ class StreamLoginPresenter {
     @required this.authentication,
   });
 
+  @override
   Stream<String> get emailErrorStream {
     return _controller?.stream?.map((state) => state.emailError)?.distinct();
   }
 
+  @override
   Stream<String> get passwordErrorStream {
     return _controller?.stream?.map((state) => state.passwordError)?.distinct();
   }
 
+  @override
   Stream<String> get mainErrorStream {
     return _controller?.stream?.map((state) => state.mainError)?.distinct();
   }
 
+  @override
   Stream<bool> get isFormValidStream {
     return _controller?.stream?.map((state) => state.isFormValid)?.distinct();
   }
 
+  @override
   Stream<bool> get isLoadingStream {
     return _controller?.stream?.map((state) => state.isLoading)?.distinct();
   }
 
   void _update() => _controller?.add(_state);
 
+  @override
   void validateEmail(String email) {
     _state.email = email;
     _state.emailError = validation.validate(field: 'email', value: email);
@@ -61,6 +68,7 @@ class StreamLoginPresenter {
     _update();
   }
 
+  @override
   void validatePassword(String password) {
     _state.password = password;
     _state.passwordError = validation.validate(
@@ -71,6 +79,7 @@ class StreamLoginPresenter {
     _update();
   }
 
+  @override
   Future<void> auth() async {
     _state.isLoading = true;
     _update();
@@ -88,6 +97,7 @@ class StreamLoginPresenter {
     _update();
   }
 
+  @override
   void dispose() {
     _controller?.close();
     _controller = null;
