@@ -13,7 +13,11 @@ class ValidatorComposite implements Validation {
   String validate({@required String field, @required String value}) {
     String error;
 
-    for (final validator in validators) {
+    final filteredValidators = validators.where(
+      (validator) => validator.field == field,
+    );
+
+    for (final validator in filteredValidators) {
       error = validator.validate(value);
 
       if (error?.isNotEmpty == true) {
@@ -47,7 +51,7 @@ void main() {
 
   setUp(() {
     validator01 = FieldValidatorSpy();
-    when(validator01.field).thenReturn('any_field');
+    when(validator01.field).thenReturn('other_field');
     mockValidation01(null);
 
     validator02 = FieldValidatorSpy();
@@ -55,7 +59,7 @@ void main() {
     mockValidation02(null);
 
     validator03 = FieldValidatorSpy();
-    when(validator03.field).thenReturn('other_field');
+    when(validator03.field).thenReturn('any_field');
     mockValidation03(null);
 
     sut = ValidatorComposite([validator01, validator02, validator03]);
@@ -69,13 +73,13 @@ void main() {
     expect(error, null);
   });
 
-  test('Should return the first error', () {
+  test('Should return the first error found', () {
     mockValidation01('error_01');
     mockValidation02('error_02');
     mockValidation03('error_03');
 
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
-    expect(error, 'error_01');
+    expect(error, 'error_02');
   });
 }
