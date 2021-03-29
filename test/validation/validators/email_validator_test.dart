@@ -10,7 +10,13 @@ class EmailValidator implements FieldValidator {
 
   @override
   String validate(String value) {
-    return null;
+    final emailRegex = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    );
+
+    final isValid = value?.isNotEmpty != true || emailRegex.hasMatch(value);
+
+    return isValid ? null : 'Email inválido.';
   }
 }
 
@@ -37,5 +43,11 @@ void main() {
     final error = sut.validate(faker.internet.email());
 
     expect(error, null);
+  });
+
+  test('Should return error if email is invalid', () {
+    final error = sut.validate('invalid_email');
+
+    expect(error, 'Email inválido.');
   });
 }
