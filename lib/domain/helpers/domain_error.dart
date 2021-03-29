@@ -4,13 +4,14 @@ enum DomainError {
 }
 
 extension DomainErrorExtension on DomainError {
-  String get description {
-    switch (this) {
-      case DomainError.invalidCredentials:
-        return 'Credenciais inválidas.';
+  Map<DomainError, String> get domainErrors {
+    return {
+      DomainError.invalidCredentials: 'Credenciais inválidas.',
+      DomainError.unexpected: 'Algo errado aconteceu. Tente novamente em breve.'
+    };
+  }
 
-      default:
-        return '';
-    }
+  String get description {
+    return domainErrors[this] ?? '';
   }
 }
