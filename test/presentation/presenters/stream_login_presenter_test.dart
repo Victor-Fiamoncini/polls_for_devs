@@ -202,25 +202,29 @@ void main() {
     },
   );
 
-  test(
-    'Should emit correct loading events on UnexpectedError',
-    () async {
-      mockAuthenticationError(DomainError.unexpected);
+  test('Should emit correct loading events on UnexpectedError', () async {
+    mockAuthenticationError(DomainError.unexpected);
 
-      sut.validateEmail(email);
-      sut.validatePassword(password);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
 
-      expectLater(sut.isLoadingStream, emits(false));
-      sut.mainErrorStream.listen(
-        expectAsync1(
-          (error) => expect(
-            error,
-            'Algo errado aconteceu. Tente novamente em breve.',
-          ),
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream.listen(
+      expectAsync1(
+        (error) => expect(
+          error,
+          'Algo errado aconteceu. Tente novamente em breve.',
         ),
-      );
+      ),
+    );
 
-      await sut.auth();
-    },
-  );
+    await sut.auth();
+  });
+
+  test('Should not emit after dispose', () async {
+    expectLater(sut.emailErrorStream, neverEmits(null));
+
+    sut.dispose();
+    sut.validateEmail(email);
+  });
 }

@@ -24,7 +24,7 @@ class StreamLoginPresenter {
   final Validation validation;
   final AuthenticationUseCase authentication;
 
-  final _controller = StreamController<LoginState>.broadcast();
+  var _controller = StreamController<LoginState>.broadcast();
   final _state = LoginState();
 
   StreamLoginPresenter({
@@ -33,26 +33,26 @@ class StreamLoginPresenter {
   });
 
   Stream<String> get emailErrorStream {
-    return _controller.stream.map((state) => state.emailError).distinct();
+    return _controller?.stream?.map((state) => state.emailError)?.distinct();
   }
 
   Stream<String> get passwordErrorStream {
-    return _controller.stream.map((state) => state.passwordError).distinct();
+    return _controller?.stream?.map((state) => state.passwordError)?.distinct();
   }
 
   Stream<String> get mainErrorStream {
-    return _controller.stream.map((state) => state.mainError).distinct();
+    return _controller?.stream?.map((state) => state.mainError)?.distinct();
   }
 
   Stream<bool> get isFormValidStream {
-    return _controller.stream.map((state) => state.isFormValid).distinct();
+    return _controller?.stream?.map((state) => state.isFormValid)?.distinct();
   }
 
   Stream<bool> get isLoadingStream {
-    return _controller.stream.map((state) => state.isLoading).distinct();
+    return _controller?.stream?.map((state) => state.isLoading)?.distinct();
   }
 
-  void _update() => _controller.add(_state);
+  void _update() => _controller?.add(_state);
 
   void validateEmail(String email) {
     _state.email = email;
@@ -86,5 +86,10 @@ class StreamLoginPresenter {
 
     _state.isLoading = false;
     _update();
+  }
+
+  void dispose() {
+    _controller?.close();
+    _controller = null;
   }
 }
