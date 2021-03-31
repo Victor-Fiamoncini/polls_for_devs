@@ -11,6 +11,11 @@ ThemeData makeDefaultTheme() {
     primaryColorLight: primaryColorLight,
     accentColor: primaryColor,
     backgroundColor: Colors.white,
+    textSelectionTheme: const TextSelectionThemeData(
+      selectionHandleColor: primaryColor,
+      selectionColor: primaryColor,
+      cursorColor: primaryColor,
+    ),
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: 30,
@@ -25,6 +30,8 @@ ThemeData makeDefaultTheme() {
       focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: primaryColor),
       ),
+      labelStyle: TextStyle(color: primaryColor),
+      hintStyle: TextStyle(color: primaryColor),
       alignLabelWithHint: true,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
