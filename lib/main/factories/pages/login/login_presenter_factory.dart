@@ -6,6 +6,6 @@ import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
 LoginPresenter makeLoginPresenter() {
   return StreamLoginPresenter(
     authentication: makeRemoteAuthenticationUseCase(),
-    validation: makeLoginValidator(),
+    validation: makeLoginValidation(),
   );
 }

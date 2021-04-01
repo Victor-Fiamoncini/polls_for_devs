@@ -1,10 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:polls_for_devs/validation/protocols/field_validator.dart';
 
-class EmailValidator implements FieldValidator {
+class EmailValidator extends Equatable implements FieldValidator {
   @override
   final String field;
 
-  EmailValidator(this.field);
+  const EmailValidator(this.field);
+
+  @override
+  List get props => [field];
 
   @override
   String validate(String value) {
