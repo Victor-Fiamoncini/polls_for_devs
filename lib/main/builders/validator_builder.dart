@@ -8,8 +8,10 @@ class ValidatorBuilder {
 
   static ValidatorBuilder _instance;
 
+  ValidatorBuilder._();
+
   static ValidatorBuilder field(String fieldName) {
-    _instance = ValidatorBuilder();
+    _instance = ValidatorBuilder._();
     _instance.fieldName = fieldName;
 
     return _instance;
