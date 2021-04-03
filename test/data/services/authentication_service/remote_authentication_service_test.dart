@@ -2,7 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:polls_for_devs/data/http/http_client.dart';
 import 'package:polls_for_devs/data/http/http_error.dart';
-import 'package:polls_for_devs/data/services/remote_authentication_service.dart';
+import 'package:polls_for_devs/data/services/authentication_service/remote_authentication_service.dart';
 import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
 import 'package:test/test.dart';
