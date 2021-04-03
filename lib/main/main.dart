@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:polls_for_devs/main/factories/pages/login/login_page_factory.dart';
 import 'package:polls_for_devs/ui/themes/default_theme.dart';
+import 'package:provider/provider.dart';
 
 void main() {
+  Provider.debugCheckInvalidValueType = null;
+
   runApp(App());
 }
 
