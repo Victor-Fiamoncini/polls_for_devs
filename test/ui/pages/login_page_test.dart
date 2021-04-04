@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:polls_for_devs/ui/pages/login/login_page.dart';
 import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
@@ -16,6 +17,7 @@ void main() {
   StreamController<String> mainErrorController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
+  StreamController<String> navigateToController;
 
   void initStreams() {
     emailErrorController = StreamController<String>();
@@ -23,6 +25,7 @@ void main() {
     mainErrorController = StreamController<String>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
+    navigateToController = StreamController<String>();
   }
 
   void mockStreams() {
@@ -40,6 +43,9 @@ void main() {
     when(presenter.isLoadingStream).thenAnswer(
       (_) => isLoadingController.stream,
     );
+    when(presenter.navigateToStream).thenAnswer(
+      (_) => navigateToController.stream,
+    );
   }
 
   void closeStreams() {
@@ -48,6 +54,7 @@ void main() {
     mainErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
+    navigateToController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -55,7 +62,16 @@ void main() {
     initStreams();
     mockStreams();
 
-    final loginPage = MaterialApp(home: LoginPage(presenter));
+    final loginPage = GetMaterialApp(
+      initialRoute: '/login',
+      getPages: [
+        GetPage(name: '/login', page: () => LoginPage(presenter)),
+        GetPage(
+          name: '/any_route',
+          page: () => const Scaffold(body: Text('fake page')),
+        ),
+      ],
+    );
     await tester.pumpWidget(loginPage);
   }
 
@@ -250,11 +266,13 @@ void main() {
     expect(find.text('main error'), findsOneWidget);
   });
 
-  testWidgets('Should close all streams on dispose', (tester) async {
+  testWidgets('Should change page', (tester) async {
     await loadPage(tester);
 
-    addTearDown(() {
-      verify(presenter.dispose()).called(1);
-    });
+    navigateToController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }

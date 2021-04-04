@@ -58,6 +58,10 @@ class StreamLoginPresenter implements LoginPresenter {
     return _controller?.stream?.map((state) => state.isLoading)?.distinct();
   }
 
+  @override
+  // TODO: implement navigateToStream
+  Stream<String> get navigateToStream => throw UnimplementedError();
+
   void _update() => _controller?.add(_state);
 
   @override
