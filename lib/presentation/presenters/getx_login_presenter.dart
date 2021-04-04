@@ -2,12 +2,14 @@ import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
+import 'package:polls_for_devs/domain/use_cases/save_current_account_use_case.dart';
 import 'package:polls_for_devs/presentation/protocols/validation.dart';
 import 'package:polls_for_devs/ui/pages/login/login_presenter.dart';
 
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Validation validation;
   final AuthenticationUseCase authentication;
+  final SaveCurrentAccountUseCase saveCurrentAccount;
 
   String _email;
   String _password;
@@ -21,6 +23,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   GetxLoginPresenter({
     @required this.validation,
     @required this.authentication,
+    @required this.saveCurrentAccount,
   });
 
   @override
@@ -69,9 +72,11 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
     _isLoading.value = true;
 
     try {
-      await authentication.auth(
+      final account = await authentication.auth(
         AuthenticationUseCaseParams(email: _email, secret: _password),
       );
+
+      await saveCurrentAccount.save(account);
     } on DomainError catch (err) {
       _mainError.value = err.description;
     }

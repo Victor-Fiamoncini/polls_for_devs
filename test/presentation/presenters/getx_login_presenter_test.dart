@@ -3,20 +3,26 @@ import 'package:mockito/mockito.dart';
 import 'package:polls_for_devs/domain/entities/account_entity.dart';
 import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/authentication_use_case.dart';
+import 'package:polls_for_devs/domain/use_cases/save_current_account_use_case.dart';
 import 'package:polls_for_devs/presentation/presenters/getx_login_presenter.dart';
 import 'package:polls_for_devs/presentation/protocols/validation.dart';
 import 'package:test/test.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
-class AuthenticationSpy extends Mock implements AuthenticationUseCase {}
+class AuthenticationUseCaseSpy extends Mock implements AuthenticationUseCase {}
+
+class SaveCurrentAccountUseCaseSpy extends Mock
+    implements SaveCurrentAccountUseCase {}
 
 void main() {
   ValidationSpy validation;
-  AuthenticationSpy authentication;
+  AuthenticationUseCaseSpy authentication;
+  SaveCurrentAccountUseCaseSpy saveCurrentAccount;
   GetxLoginPresenter sut;
   String email;
   String password;
+  String token;
 
   PostExpectation mockValidationCall(String field) {
     return when(
@@ -34,9 +40,7 @@ void main() {
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
 
   void mockAuthentication() {
-    mockAuthenticationCall().thenAnswer(
-      (_) async => AccountEntity(faker.guid.guid()),
-    );
+    mockAuthenticationCall().thenAnswer((_) async => AccountEntity(token));
   }
 
   void mockAuthenticationError(DomainError error) {
@@ -45,13 +49,16 @@ void main() {
 
   setUp(() {
     validation = ValidationSpy();
-    authentication = AuthenticationSpy();
+    authentication = AuthenticationUseCaseSpy();
+    saveCurrentAccount = SaveCurrentAccountUseCaseSpy();
     sut = GetxLoginPresenter(
       validation: validation,
       authentication: authentication,
+      saveCurrentAccount: saveCurrentAccount,
     );
     email = faker.internet.email();
     password = faker.internet.password();
+    token = faker.guid.guid();
     mockValidation();
     mockAuthentication();
   });
@@ -157,7 +164,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should call Authentication with correct values', () async {
+  test('Should call AuthenticationUseCase with correct values', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
@@ -173,8 +180,17 @@ void main() {
     ).called(1);
   });
 
+  test('Should call SaveCurrentAccountUseCase with correct value', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
+  });
+
   test(
-    'Should emit correct loading events on Authentication success',
+    'Should emit correct loading events on AuthenticationUseCase success',
     () async {
       sut.validateEmail(email);
       sut.validatePassword(password);
