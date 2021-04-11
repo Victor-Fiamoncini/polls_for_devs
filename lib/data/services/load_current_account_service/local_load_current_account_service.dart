@@ -1,12 +1,12 @@
 import 'package:meta/meta.dart';
-import 'package:polls_for_devs/domain/entities/account_entity.dart';
-import 'package:polls_for_devs/domain/use_cases/load_current_account_use_case.dart';
+import 'package:polls_for_devs/data/cache/fetch_secure_cache_storage.dart';
 
-class LocalLoadCurrentAccountService implements LoadCurrentAccountUseCase {
-  LocalLoadCurrentAccountService();
+class LocalLoadCurrentAccountService {
+  final FetchSecureCacheStorage fetchSecureCacheStorage;
 
-  @override
-  Future<AccountEntity> load() async {
-    throw UnimplementedError();
+  LocalLoadCurrentAccountService({@required this.fetchSecureCacheStorage});
+
+  Future<void> load() async {
+    await fetchSecureCacheStorage.fetchSecure('token');
   }
 }
