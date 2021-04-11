@@ -3,7 +3,8 @@ import 'package:meta/meta.dart';
 import 'package:polls_for_devs/data/cache/fetch_secure_cache_storage.dart';
 import 'package:polls_for_devs/data/cache/save_secure_cache_storage.dart';
 
-class LocalStorageAdapter implements SaveSecureCacheStorage {
+class LocalStorageAdapter
+    implements SaveSecureCacheStorage, FetchSecureCacheStorage {
   final FlutterSecureStorage secureStorage;
 
   LocalStorageAdapter({@required this.secureStorage});
@@ -17,7 +18,7 @@ class LocalStorageAdapter implements SaveSecureCacheStorage {
   }
 
   @override
-  Future<void> fetchSecure(String key) async {
-    await secureStorage.read(key: key);
+  Future<String> fetchSecure(String key) async {
+    return secureStorage.read(key: key);
   }
 }
