@@ -48,7 +48,7 @@ void main() {
   });
 
   test(
-    'Should throw UnexpectedError if FetchSecureCacheStorage thorws',
+    'Should throw UnexpectedError if FetchSecureCacheStorage throws',
     () {
       mockFetchSecureError();
 
