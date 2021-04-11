@@ -3,6 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:polls_for_devs/data/cache/fetch_secure_cache_storage.dart';
 import 'package:polls_for_devs/data/services/load_current_account_service/local_load_current_account_service.dart';
 import 'package:polls_for_devs/domain/entities/account_entity.dart';
+import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:test/test.dart';
 
 class FetchSecureCacheStorageSpy extends Mock
@@ -13,10 +14,16 @@ void main() {
   FetchSecureCacheStorageSpy fetchSecureCacheStorage;
   String token;
 
-  void mockFetchSecure() {
-    when(fetchSecureCacheStorage.fetchSecure(any)).thenAnswer(
-      (_) async => token,
-    );
+  PostExpectation mockFetchSecureCall() {
+    return when(fetchSecureCacheStorage.fetchSecure(any));
+  }
+
+  void mockFetchSecureSuccess() {
+    mockFetchSecureCall().thenAnswer((_) async => token);
+  }
+
+  void mockFetchSecureError() {
+    when(fetchSecureCacheStorage.fetchSecure(any)).thenThrow(Exception());
   }
 
   setUp(() {
@@ -25,7 +32,7 @@ void main() {
       fetchSecureCacheStorage: fetchSecureCacheStorage,
     );
     token = faker.guid.guid();
-    mockFetchSecure();
+    mockFetchSecureSuccess();
   });
 
   test('Should call FetchSecureCacheStorage with correct value', () async {
@@ -39,4 +46,15 @@ void main() {
 
     expect(account, AccountEntity(token));
   });
+
+  test(
+    'Should throw UnexpectedError if FetchSecureCacheStorage thorws',
+    () {
+      mockFetchSecureError();
+
+      final future = sut.load();
+
+      expect(future, throwsA(DomainError.unexpected));
+    },
+  );
 }

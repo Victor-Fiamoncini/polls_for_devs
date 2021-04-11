@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:polls_for_devs/data/cache/fetch_secure_cache_storage.dart';
 import 'package:polls_for_devs/domain/entities/account_entity.dart';
+import 'package:polls_for_devs/domain/helpers/domain_error.dart';
 import 'package:polls_for_devs/domain/use_cases/load_current_account_use_case.dart';
 
 class LocalLoadCurrentAccountService implements LoadCurrentAccountUseCase {
@@ -10,8 +11,12 @@ class LocalLoadCurrentAccountService implements LoadCurrentAccountUseCase {
 
   @override
   Future<AccountEntity> load() async {
-    final token = await fetchSecureCacheStorage.fetchSecure('token');
+    try {
+      final token = await fetchSecureCacheStorage.fetchSecure('token');
 
-    return AccountEntity(token);
+      return AccountEntity(token);
+    } catch (e) {
+      throw DomainError.unexpected;
+    }
   }
 }
